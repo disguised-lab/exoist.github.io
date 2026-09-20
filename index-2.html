@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mock Test — General Competitive Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --paper-2: #F1EEE6;
+    --rule: #C9D4DE;
+    --ink: #14213D;
+    --ink-soft: #4A5972;
+    --accent: #C77D00;
+    --accent-soft: #F3E1BE;
+    --good: #2D6A4F;
+    --good-bg: #E4F2EB;
+    --bad: #9B2C2C;
+    --bad-bg: #FBE9E7;
+    --card: #FFFFFF;
+    --shadow: rgba(20,33,61,0.10);
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12161F;
+      --paper-2: #1A2030;
+      --rule: #2B3550;
+      --ink: #EDEFF5;
+      --ink-soft: #A7B0C6;
+      --accent: #E0A030;
+      --accent-soft: #3A2E15;
+      --good: #6FCF97;
+      --good-bg: #16301F;
+      --bad: #F2867A;
+      --bad-bg: #3A1717;
+      --card: #1A2030;
+      --shadow: rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #12161F;
+    --paper-2: #1A2030;
+    --rule: #2B3550;
+    --ink: #EDEFF5;
+    --ink-soft: #A7B0C6;
+    --accent: #E0A030;
+    --accent-soft: #3A2E15;
+    --good: #6FCF97;
+    --good-bg: #16301F;
+    --bad: #F2867A;
+    --bad-bg: #3A1717;
+    --card: #1A2030;
+    --shadow: rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image: repeating-linear-gradient(var(--paper) 0px, var(--paper) 27px, var(--rule) 28px);
+    background-attachment: local;
+  }
+  body.no-rules { background-image: none; }
+  h1, h2, h3 { font-family: 'Bitter', serif; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  #app { max-width: 980px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+  button { font-family: inherit; cursor: pointer; border: none; }
+  button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a { color: var(--accent); }
+
+  /* ---------- START SCREEN ---------- */
+  .start-wrap { padding: 28px 20px 40px; }
+  .admit-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: 0 6px 20px var(--shadow);
+    padding: 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .admit-card::before {
+    content: "";
+    position: absolute; inset: 8px;
+    border: 1px dashed var(--rule);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+  .stamp {
+    position: absolute; top: 18px; right: 18px;
+    width: 68px; height: 68px; border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    transform: rotate(-12deg);
+    color: var(--accent); font-family: 'Bitter', serif; font-weight: 800;
+    font-size: 11px; text-align: center; line-height: 1.15;
+    opacity: 0.85;
+  }
+  .admit-card h1 { font-size: clamp(22px, 5vw, 30px); color: var(--ink); max-width: 80%; }
+  .admit-card .sub { color: var(--ink-soft); font-size: 14px; margin-bottom: 18px; }
+  .facts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 18px; margin: 18px 0; }
+  .fact { border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
+  .fact .label { font-size: 11px; color: var(--ink-soft); }
+  .fact .value { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 15px; }
+  .section-list { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 8px; }
+  .section-list li {
+    display: flex; justify-content: space-between; align-items: baseline;
+    background: var(--paper-2); border-radius: 3px; padding: 10px 12px;
+    border-left: 3px solid var(--accent);
+    font-size: 14px;
+  }
+  .section-list b { font-family: 'Bitter', serif; }
+  .rules {
+    font-size: 13.5px; color: var(--ink-soft); line-height: 1.6;
+    margin: 16px 0; padding-left: 18px;
+  }
+  .rules li { margin-bottom: 4px; }
+  .cta-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+  .btn {
+    padding: 13px 22px; border-radius: 3px; font-weight: 600; font-size: 15px;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--ink); color: var(--paper); box-shadow: 0 3px 0 var(--accent); }
+  .btn-primary:hover { box-shadow: 0 4px 0 var(--accent); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--rule) !important; }
+
+  /* ---------- TEST SCREEN ---------- */
+  .exam-header {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--ink); color: var(--paper);
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .exam-header .title { font-family: 'Bitter', serif; font-size: 14px; font-weight: 700; opacity: 0.9; }
+  .timer-box {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 18px;
+    background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 3px;
+    letter-spacing: 0.03em;
+  }
+  .timer-box.low { background: var(--bad); color: #fff; }
+  .submit-btn-header {
+    background: var(--accent); color: var(--ink); padding: 8px 14px; border-radius: 3px;
+    font-weight: 700; font-size: 13px; white-space: nowrap;
+  }
+  .section-tabs {
+    display: flex; overflow-x: auto; gap: 6px; padding: 10px 14px;
+    background: var(--paper-2); border-bottom: 1px solid var(--rule);
+    position: sticky; top: 52px; z-index: 19;
+    scrollbar-width: none;
+  }
+  .section-tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    background: var(--card); border: 1px solid var(--rule); color: var(--ink-soft);
+    padding: 7px 12px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tab .cnt { opacity: 0.7; font-family: 'IBM Plex Mono', monospace; margin-left: 4px; }
+
+  .test-body { flex: 1; display: flex; padding: 16px 14px 100px; gap: 18px; }
+  .q-panel { flex: 1; min-width: 0; }
+  .q-card {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 18px 16px; box-shadow: 0 2px 10px var(--shadow);
+  }
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .q-num { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--accent); font-size: 13px; }
+  .q-topic { font-size: 11.5px; color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 12px; padding: 2px 9px; }
+  .q-text { font-size: 16.5px; line-height: 1.5; margin-bottom: 18px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 12px; border-radius: 3px; margin-bottom: 9px;
+    border: 1px solid var(--rule); background: var(--paper);
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt.selected { border-color: var(--ink); background: var(--accent-soft); }
+  .bubble {
+    width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--ink-soft);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 12px; color: var(--ink-soft);
+  }
+  .opt.selected .bubble { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .opt-text { font-size: 15px; flex: 1; }
+  .q-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; }
+  .q-nav button { flex: 1; padding: 12px 8px; border-radius: 3px; font-weight: 600; font-size: 13.5px; }
+  .nav-secondary { background: var(--paper-2); color: var(--ink); border: 1px solid var(--rule) !important; }
+  .nav-primary { background: var(--ink); color: var(--paper); }
+
+  .palette-side {
+    width: 230px; flex-shrink: 0;
+  }
+  .palette-card {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: 14px;
+    position: sticky; top: 108px;
+  }
+  .palette-legend { display: flex; flex-wrap: wrap; gap: 8px; font-size: 10.5px; margin-bottom: 10px; color: var(--ink-soft); }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 3px; vertical-align: middle; }
+  .p-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .p-cell {
+    aspect-ratio: 1; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-weight: 700;
+    font-size: 12px; display: flex; align-items: center; justify-content: center;
+    background: var(--paper-2); color: var(--ink-soft); border: 1px solid var(--rule);
+  }
+  .p-cell.answered { background: var(--good); color: #fff; border-color: var(--good); }
+  .p-cell.visited { background: var(--accent-soft); color: var(--ink); border-color: var(--accent); }
+  .p-cell.current { outline: 2px solid var(--ink); outline-offset: 1px; }
+
+  .palette-drawer-btn {
+    display: none;
+    position: fixed; bottom: calc(74px + env(safe-area-inset-bottom, 0px)); right: 14px; z-index: 25;
+    background: var(--ink); color: var(--paper); border-radius: 24px; padding: 10px 16px;
+    font-size: 12.5px; font-weight: 700; box-shadow: 0 4px 14px var(--shadow);
+  }
+  .drawer-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 30;
+  }
+  .drawer-overlay.open { display: block; }
+  .drawer-sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 31;
+    background: var(--card); border-radius: 14px 14px 0 0; padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%); transition: transform .22s ease;
+    max-height: 70vh; overflow-y: auto;
+  }
+  .drawer-sheet.open { transform: translateY(0); }
+  .drawer-handle { width: 40px; height: 4px; background: var(--rule); border-radius: 2px; margin: 0 auto 12px; }
+
+  .bottom-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 22;
+    background: var(--card); border-top: 1px solid var(--rule);
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 10px; max-width: 980px; margin: 0 auto;
+  }
+  .bottom-bar button { flex: 1; padding: 13px 8px; border-radius: 3px; font-weight: 700; font-size: 13.5px; }
+
+  @media (min-width: 860px) {
+    .palette-drawer-btn { display: none !important; }
+  }
+  @media (max-width: 859px) {
+    .palette-side { display: none; }
+  }
+
+  /* ---------- RESULT SCREEN ---------- */
+  .result-wrap { padding: 24px 16px 60px; }
+  .score-hero {
+    background: var(--ink); color: var(--paper); border-radius: 6px; padding: 26px 20px;
+    text-align: center; margin-bottom: 20px;
+  }
+  .score-hero .big { font-family: 'IBM Plex Mono', monospace; font-size: clamp(40px, 12vw, 56px); font-weight: 700; color: var(--accent); line-height: 1; }
+  .score-hero .of { color: var(--ink-soft); font-size: 14px; margin-top: 4px; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+  .stat-chip { background: rgba(255,255,255,0.07); border-radius: 4px; padding: 10px 6px; }
+  .stat-chip .n { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 18px; }
+  .stat-chip .l { font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
+  .sec-card {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 16px; margin-bottom: 10px;
+  }
+  .sec-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .sec-card-top h3 { font-size: 15px; }
+  .sec-score { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--accent); }
+  .bar-track { height: 7px; background: var(--paper-2); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--good); }
+  .sec-sub { display: flex; gap: 14px; font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
+
+  /* ---------- SOLUTIONS SCREEN ---------- */
+  .sol-wrap { padding: 20px 16px 60px; }
+  .sol-sec-heading { margin: 22px 0 10px; font-size: 17px; }
+  .sol-card {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: 15px; margin-bottom: 12px;
+    border-left: 4px solid var(--rule);
+  }
+  .sol-card.correct { border-left-color: var(--good); }
+  .sol-card.wrong { border-left-color: var(--bad); }
+  .sol-card.skipped { border-left-color: var(--ink-soft); }
+  .sol-q-top { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .sol-tag { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+  .sol-tag.correct { background: var(--good-bg); color: var(--good); }
+  .sol-tag.wrong { background: var(--bad-bg); color: var(--bad); }
+  .sol-tag.skipped { background: var(--paper-2); color: var(--ink-soft); }
+  .sol-q { font-size: 15px; margin-bottom: 10px; line-height: 1.5; }
+  .sol-opt { padding: 8px 10px; border-radius: 3px; font-size: 13.5px; margin-bottom: 6px; border: 1px solid var(--rule); display: flex; gap: 8px; }
+  .sol-opt.is-correct { background: var(--good-bg); border-color: var(--good); color: var(--good); font-weight: 600; }
+  .sol-opt.is-wrong-pick { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); font-weight: 600; }
+  .sol-explain { font-size: 13px; color: var(--ink-soft); background: var(--paper-2); border-radius: 3px; padding: 10px 12px; margin-top: 8px; line-height: 1.55; }
+  .sol-explain b { color: var(--ink); }
+  .top-nav-result { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+
+  .hide { display: none !important; }
+  ::selection { background: var(--accent-soft); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= QUESTION BANKS (25 per section pool) ================= */
+const BANK = {
+GI: [
+{t:"Semantic Analogy", q:"Doctor is related to Hospital in the same way as Teacher is related to:", o:["School","Book","Student","Chalk"], a:0, e:"A doctor's workplace is a hospital; a teacher's workplace is a school. The relationship is 'person : workplace'."},
+{t:"Semantic Analogy", q:"Pen is related to Write in the same way as Knife is related to:", o:["Cut","Sharp","Kitchen","Blade"], a:0, e:"A pen is used to write; a knife is used to cut. The relationship is 'tool : function'."},
+{t:"Number Analogy", q:"4 is related to 16 in the same way as 5 is related to:", o:["20","25","30","10"], a:1, e:"16 = 4². Applying the same rule, 5² = 25."},
+{t:"Symbolic Operations", q:"If '@' means 'divided by' and '#' means 'multiplied by', find the value of: 8 @ 2 # 3", o:["16","12","4","6"], a:1, e:"Replace symbols: 8 ÷ 2 × 3 = 4 × 3 = 12 (solve left to right after substitution)."},
+{t:"Trends / Series", q:"Find the missing number: 2, 6, 12, 20, 30, ?", o:["40","42","44","36"], a:1, e:"The differences increase by 2 each time: 4, 6, 8, 10, 12. So next term = 30 + 12 = 42."},
+{t:"Coding-Decoding", q:"If CAT is coded as 3-1-20, how is DOG coded (using each letter's position in the alphabet)?", o:["4-15-7","4-7-15","7-15-4","4-16-7"], a:0, e:"D=4, O=15, G=7, so DOG becomes 4-15-7."},
+{t:"Space Orientation", q:"Facing North, Ram turns 90° clockwise and then 180°. Which direction is he facing now?", o:["South","West","North","East"], a:1, e:"North → 90° clockwise → East → 180° → West. He now faces West."},
+{t:"Space Orientation", q:"A man walks 5 km North, then 5 km East, then 5 km South. How far and in which direction is he from his starting point?", o:["5 km East","5 km West","10 km East","5 km North"], a:0, e:"The North and South legs cancel out (5 km each), leaving only the 5 km East displacement."},
+{t:"Semantic Classification", q:"Find the odd one out: Apple, Mango, Potato, Banana", o:["Apple","Mango","Potato","Banana"], a:2, e:"Apple, Mango and Banana are fruits, while Potato is a vegetable — the odd one out."},
+{t:"Semantic Classification", q:"Find the odd one out: Triangle, Square, Circle, Cube", o:["Triangle","Square","Circle","Cube"], a:3, e:"Triangle, Square and Circle are 2-D (plane) figures, while Cube is a 3-D (solid) figure."},
+{t:"Number Classification", q:"Find the odd number out: 8, 27, 64, 90", o:["8","27","64","90"], a:3, e:"8=2³, 27=3³, 64=4³ are perfect cubes, but 90 is not a perfect cube."},
+{t:"Drawing Inferences", q:"Statements: All cats are dogs. All dogs are cows. Conclusions: I. All cats are cows. II. All cows are cats. Which conclusion(s) follow?", o:["Only I","Only II","Both I and II","Neither I nor II"], a:0, e:"Since all cats are dogs and all dogs are cows, it logically follows that all cats are cows (I). II does not follow, as it reverses the relationship."},
+{t:"Drawing Inferences", q:"Statements: Some pens are books. All books are papers. Conclusions: I. Some pens are papers. II. All papers are books. Which follows?", o:["Only I","Only II","Both I and II","Neither I nor II"], a:0, e:"Since some pens are books, and all books are papers, at least some pens must be papers (I). II reverses the given relationship and does not follow."},
+{t:"Coding-Decoding", q:"In a certain code, ROSE is written as SPTF (each letter shifted forward by one position). How is BIRD written in that code?", o:["CJSE","CJSD","DJSE","CJTE"], a:0, e:"Shift each letter forward by one: B→C, I→J, R→S, D→E, giving CJSE."},
+{t:"Coding-Decoding", q:"If PAPER is written in reverse order as REPAP, how is PENCIL written in the same code?", o:["LICNEP","LICNPE","PENCIL","LICENP"], a:0, e:"The code simply reverses the letters of the word: PENCIL reversed is LICNEP."},
+{t:"Numerical Operations", q:"As per the standard rule of operations (BODMAS), evaluate: 6 + 3 × 2", o:["18","12","9","15"], a:1, e:"Multiplication is done before addition: 3 × 2 = 6, then 6 + 6 = 12."},
+{t:"Blood Relation", q:"A is B's father. C is B's sister. D is C's mother. How is D related to A?", o:["Wife","Sister","Mother","Daughter"], a:0, e:"D is the mother of B and C, and A is B's father, so D must be A's wife."},
+{t:"Blood Relation", q:"Introducing a woman, a man said, 'Her mother is the only daughter of my mother.' How is the man related to the woman?", o:["Father","Maternal uncle","Brother","Grandfather"], a:1, e:"'The only daughter of my mother' is the man's sister. Since she is the woman's mother, the man is the woman's maternal uncle."},
+{t:"Critical Thinking", q:"Statement: All employees must wear ID cards in the office. Ram was not wearing his ID card but was still allowed to enter. Which is the most reasonable explanation?", o:["The rule does not exist", "Ram is not an employee", "Ram forgot his ID card but was recognized by security", "The statement is false"], a:2, e:"The most reasonable, least assumption-heavy explanation is that Ram was personally recognized despite forgetting his card."},
+{t:"Problem Solving", q:"In a queue, Rahul is 7th from the front and 12th from the end. How many people are in the queue?", o:["18","19","20","17"], a:0, e:"Total = (position from front) + (position from end) − 1 = 7 + 12 − 1 = 18."},
+{t:"Word Building", q:"Using only the letters of the word 'GENERATION', can the word 'REACT' be formed?", o:["Yes","No"], a:1, e:"REACT needs the letter C, which is not present in GENERATION, so it cannot be formed."},
+{t:"Emotional Intelligence", q:"A colleague is visibly upset after being criticized in a meeting. The most emotionally intelligent response is to:", o:["Ignore it and continue working", "Interrupt the meeting to publicly defend them", "Speak with them privately afterward to offer support", "Tell them to toughen up"], a:2, e:"Emotional intelligence favours private, supportive, non-confrontational responses that respect the colleague's dignity."},
+{t:"Social Intelligence", q:"At a family gathering, an elderly relative repeats a story you have already heard. The best response is to:", o:["Point out that you've heard it before", "Listen politely and engage", "Walk away", "Correct factual errors publicly"], a:1, e:"Socially intelligent behaviour values the relationship and the relative's feelings over strict factual correction."},
+{t:"Number Series", q:"Find the missing term: 3, 7, 15, 31, ?", o:["60","63","65","67"], a:1, e:"Each term follows the rule (previous × 2) + 1: 3×2+1=7, 7×2+1=15, 15×2+1=31, 31×2+1=63."},
+{t:"Figural / Pattern Reasoning", q:"A square sheet of paper is folded in half twice and then a single hole is punched through the middle of the folded square. When unfolded, how many holes will the sheet show?", o:["1","2","4","8"], a:2, e:"Folding twice creates 4 layers stacked over the punch point, so unfolding reveals 4 holes, arranged symmetrically."}
+],
+
+GA: [
+{t:"History", q:"Who was the first Governor-General of independent India?", o:["Lord Mountbatten","C. Rajagopalachari","Jawaharlal Nehru","Lord Curzon"], a:0, e:"Lord Mountbatten served as the first Governor-General of independent India (1947–48), followed by C. Rajagopalachari."},
+{t:"History", q:"The Quit India Movement was launched in which year?", o:["1942","1930","1920","1947"], a:0, e:"The Quit India Movement was launched by Mahatma Gandhi on 8 August 1942."},
+{t:"History", q:"Who founded the Mauryan Empire?", o:["Ashoka","Chandragupta Maurya","Bindusara","Samudragupta"], a:1, e:"Chandragupta Maurya founded the Mauryan Empire around 322 BCE, with guidance from Chanakya."},
+{t:"Polity", q:"The Constitution of India was adopted by the Constituent Assembly on:", o:["26 January 1950","26 November 1949","15 August 1947","26 January 1949"], a:1, e:"The Constitution was adopted on 26 November 1949 (celebrated as Constitution Day) and came into force on 26 January 1950 (Republic Day)."},
+{t:"Polity", q:"Who is popularly known as the chief architect of the Indian Constitution?", o:["Mahatma Gandhi","B. R. Ambedkar","Jawaharlal Nehru","Sardar Patel"], a:1, e:"Dr. B. R. Ambedkar chaired the Drafting Committee of the Constituent Assembly and is regarded as its chief architect."},
+{t:"Polity", q:"What is the minimum age required to become the Prime Minister of India?", o:["18 years","21 years","25 years","35 years"], a:2, e:"A person must be at least 25 years old to be a member of the Lok Sabha, which is the minimum requirement to become Prime Minister."},
+{t:"Geography", q:"Which is the longest river in India?", o:["Yamuna","Godavari","Ganga","Brahmaputra"], a:2, e:"The Ganga is the longest river flowing entirely within India, at about 2,525 km."},
+{t:"Geography", q:"Mount Everest is located in which mountain range?", o:["Andes","Himalayas","Alps","Rockies"], a:1, e:"Mount Everest lies in the Himalayan range, on the border of Nepal and China (Tibet)."},
+{t:"Geography", q:"Which is the largest Indian state by area?", o:["Rajasthan","Madhya Pradesh","Maharashtra","Uttar Pradesh"], a:0, e:"Rajasthan is India's largest state by area, covering about 3.42 lakh sq. km."},
+{t:"Geography", q:"The Tropic of Cancer passes through how many Indian states?", o:["6","7","8","9"], a:2, e:"The Tropic of Cancer passes through 8 Indian states, from Gujarat to Mizoram."},
+{t:"Economy", q:"The Reserve Bank of India (RBI) was established in:", o:["1935","1947","1950","1969"], a:0, e:"The RBI was established on 1 April 1935 under the Reserve Bank of India Act, 1934."},
+{t:"Economy", q:"Which institution acts as India's central bank?", o:["SBI","RBI","NABARD","SEBI"], a:1, e:"The Reserve Bank of India (RBI) functions as the country's central bank, regulating monetary policy and currency issue."},
+{t:"Economy", q:"GDP stands for:", o:["Gross Domestic Product","General Development Plan","Gross Domestic Price","Global Development Product"], a:0, e:"GDP (Gross Domestic Product) measures the total monetary value of goods and services produced within a country in a given period."},
+{t:"Science", q:"The SI unit of force is:", o:["Joule","Newton","Watt","Pascal"], a:1, e:"Force is measured in Newtons (N), named after Sir Isaac Newton; Joule measures energy, Watt measures power, Pascal measures pressure."},
+{t:"Science", q:"Which gas is most abundant in the Earth's atmosphere?", o:["Oxygen","Carbon dioxide","Nitrogen","Hydrogen"], a:2, e:"Nitrogen makes up about 78% of the Earth's atmosphere, far more than oxygen (about 21%)."},
+{t:"Science", q:"Which cell organelle is known as the 'powerhouse of the cell'?", o:["Nucleus","Ribosome","Mitochondria","Golgi body"], a:2, e:"Mitochondria generate ATP through cellular respiration, earning them the name 'powerhouse of the cell'."},
+{t:"Science", q:"Which vitamin is synthesized in human skin upon exposure to sunlight?", o:["Vitamin A","Vitamin C","Vitamin D","Vitamin K"], a:2, e:"Vitamin D is produced in the skin when it is exposed to ultraviolet (UV) rays from sunlight."},
+{t:"Culture", q:"Bharatanatyam is a classical dance form native to which state?", o:["Kerala","Tamil Nadu","Odisha","Assam"], a:1, e:"Bharatanatyam originated in Tamil Nadu and is one of the oldest classical dance forms of India."},
+{t:"Culture", q:"The famous Khajuraho temples are located in which state?", o:["Madhya Pradesh","Rajasthan","Uttar Pradesh","Gujarat"], a:0, e:"The Khajuraho group of temples, known for their intricate carvings, is located in Madhya Pradesh."},
+{t:"Neighbouring Countries", q:"Which country shares the longest land border with India?", o:["Pakistan","China","Bangladesh","Nepal"], a:2, e:"Bangladesh shares the longest land border with India, spanning roughly 4,096 km."},
+{t:"Neighbouring Countries", q:"What is the official currency of Nepal?", o:["Rupee","Taka","Ngultrum","Nepalese Rupee"], a:3, e:"Nepal's official currency is the Nepalese Rupee; Bangladesh uses the Taka and Bhutan uses the Ngultrum."},
+{t:"General Knowledge", q:"Which of the following is widely regarded as India's national sport in popular usage, though none has been officially declared?", o:["Cricket","Hockey","Kabaddi","Football"], a:1, e:"Field hockey is commonly cited as India's national sport in popular belief, although no sport has ever been officially notified as such."},
+{t:"General Knowledge", q:"The Bharat Ratna is India's:", o:["Highest civilian award","Highest military award","Highest sports award","Highest literary award"], a:0, e:"The Bharat Ratna is the highest civilian award in India, given for exceptional service in any field."},
+{t:"General Policy", q:"The Right to Education (RTE) Act guarantees free and compulsory education to children in which age group?", o:["3–14 years","6–14 years","5–15 years","6–16 years"], a:1, e:"The RTE Act, 2009 guarantees free and compulsory education to children aged 6 to 14 years."},
+{t:"General Knowledge", q:"Which is the smallest Indian state by area?", o:["Sikkim","Tripura","Goa","Nagaland"], a:2, e:"Goa is the smallest Indian state by area, covering about 3,702 sq. km."}
+],
+
+QA: [
+{t:"Number System", q:"What is the smallest 4-digit number exactly divisible by 12?", o:["1008","1000","1004","1012"], a:0, e:"1000 ÷ 12 = 83.33; the next whole multiple is 84 × 12 = 1008, the smallest 4-digit multiple of 12."},
+{t:"Number System (LCM)", q:"Find the LCM of 12 and 18.", o:["36","24","72","18"], a:0, e:"12 = 2²×3, 18 = 2×3²; LCM takes the highest powers: 2²×3² = 36."},
+{t:"Percentage", q:"What is 25% of 480?", o:["110","120","125","130"], a:1, e:"25% of 480 = (25/100) × 480 = 120."},
+{t:"Ratio & Proportion", q:"Rs. 600 is divided among three people in the ratio 2:3:5. Find the largest share.", o:["Rs. 200","Rs. 300","Rs. 250","Rs. 350"], a:1, e:"Total parts = 2+3+5 = 10. Largest share = (5/10) × 600 = Rs. 300."},
+{t:"Average", q:"The average of 5 numbers is 20. If one number is excluded, the average of the remaining 4 becomes 18. Find the excluded number.", o:["24","26","28","30"], a:2, e:"Sum of 5 numbers = 100; sum of remaining 4 = 72; excluded number = 100 − 72 = 28."},
+{t:"Simple Interest", q:"Find the Simple Interest on Rs. 5,000 at 8% per annum for 3 years.", o:["Rs. 1,000","Rs. 1,200","Rs. 1,500","Rs. 1,250"], a:1, e:"SI = (P×R×T)/100 = (5000×8×3)/100 = Rs. 1,200."},
+{t:"Compound Interest", q:"Find the Compound Interest on Rs. 10,000 at 10% per annum for 2 years.", o:["Rs. 2,000","Rs. 2,100","Rs. 2,200","Rs. 2,500"], a:1, e:"Amount = 10000×(1.1)² = 12,100. CI = 12,100 − 10,000 = Rs. 2,100."},
+{t:"Profit & Loss", q:"A man buys an article for Rs. 400 and sells it for Rs. 460. Find his profit percentage.", o:["10%","12%","15%","20%"], a:2, e:"Profit = 460 − 400 = 60. Profit% = (60/400) × 100 = 15%."},
+{t:"Discount", q:"The marked price of an item is Rs. 1,000 and a discount of 20% is offered. Find the selling price.", o:["Rs. 750","Rs. 800","Rs. 850","Rs. 900"], a:1, e:"Discount = 20% of 1000 = 200. Selling price = 1000 − 200 = Rs. 800."},
+{t:"Partnership", q:"A and B invest Rs. 3,000 and Rs. 5,000 respectively for a year. If the total profit is Rs. 1,600, find A's share.", o:["Rs. 500","Rs. 600","Rs. 700","Rs. 800"], a:1, e:"Profit is shared in the ratio of investment, 3:5. A's share = (3/8) × 1600 = Rs. 600."},
+{t:"Mixture & Alligation", q:"In what ratio must water be mixed with milk so that, on selling the mixture at the cost price of milk, a gain of 20% is made?", o:["1:5","1:4","1:6","2:5"], a:0, e:"A gain of 20% by selling at cost price of milk means water:milk = 20:100 = 1:5."},
+{t:"Time & Distance", q:"A car covers 180 km in 3 hours. Find its speed.", o:["50 km/h","55 km/h","60 km/h","65 km/h"], a:2, e:"Speed = Distance/Time = 180/3 = 60 km/h."},
+{t:"Time & Work", q:"A can complete a work in 10 days and B in 15 days. Working together, in how many days can they complete it?", o:["5 days","6 days","7 days","8 days"], a:1, e:"Combined rate = 1/10 + 1/15 = 3/30 + 2/30 = 5/30 = 1/6, so together they take 6 days."},
+{t:"Algebra", q:"If x + 1/x = 3, find the value of x² + 1/x².", o:["5","7","9","11"], a:1, e:"x² + 1/x² = (x + 1/x)² − 2 = 3² − 2 = 9 − 2 = 7."},
+{t:"Algebra (Graphs)", q:"The graph of the linear equation y = 2x + 3 cuts the y-axis at which point?", o:["(0, 3)","(3, 0)","(0, 2)","(2, 0)"], a:0, e:"On the y-axis, x = 0, so y = 2(0) + 3 = 3. The graph cuts the y-axis at (0, 3)."},
+{t:"Elementary Surds", q:"Simplify: √50 + √8", o:["7√2","6√2","10√2","7√5"], a:0, e:"√50 = 5√2 and √8 = 2√2, so their sum is 5√2 + 2√2 = 7√2."},
+{t:"Geometry (Triangle Centres)", q:"The point of intersection of the three medians of a triangle is called its:", o:["Circumcentre","Incentre","Centroid","Orthocentre"], a:2, e:"The centroid is the point where all three medians of a triangle intersect."},
+{t:"Geometry (Circle)", q:"The angle inscribed in a semicircle is always:", o:["45°","60°","90°","180°"], a:2, e:"By the angle-in-a-semicircle theorem, any angle subtended by a diameter at the circle's circumference is 90°."},
+{t:"Geometry (Congruence)", q:"Two triangles are congruent if all three corresponding sides are equal. This criterion is called:", o:["SAS","SSS","ASA","AAA"], a:1, e:"The Side-Side-Side (SSS) criterion states triangles are congruent when all three pairs of corresponding sides are equal."},
+{t:"Mensuration (Circle)", q:"Find the area of a circle with radius 7 cm. (Use π = 22/7)", o:["144 cm²","154 cm²","164 cm²","174 cm²"], a:1, e:"Area = πr² = (22/7) × 7 × 7 = 154 cm²."},
+{t:"Mensuration (Cube)", q:"Find the volume of a cube with side 5 cm.", o:["100 cm³","110 cm³","125 cm³","150 cm³"], a:2, e:"Volume of a cube = side³ = 5³ = 125 cm³."},
+{t:"Mensuration (Cylinder)", q:"Find the curved surface area of a right circular cylinder with radius 7 cm and height 10 cm. (Use π = 22/7)", o:["420 cm²","440 cm²","460 cm²","480 cm²"], a:1, e:"CSA = 2πrh = 2 × (22/7) × 7 × 10 = 440 cm²."},
+{t:"Trigonometry", q:"Find the value of sin 30° + cos 60°.", o:["0.5","1","1.5","0"], a:1, e:"sin 30° = 0.5 and cos 60° = 0.5, so their sum is 1."},
+{t:"Trigonometry (Heights & Distances)", q:"The angle of elevation of the sun is 45°. Find the length of the shadow of a 10 m pole.", o:["5 m","10 m","15 m","20 m"], a:1, e:"tan 45° = height/shadow = 1, so shadow = height = 10 m."},
+{t:"Statistical Charts", q:"In a pie chart, a sector represents 25% of the total data. What is the angle of that sector?", o:["60°","90°","120°","45°"], a:1, e:"A full circle is 360°. 25% of 360° = 90°."}
+],
+
+EL: [
+{t:"Spot the Error", q:"Identify the part with an error: 'She (A) / have been (B) / working here (C) / since 2015. (D)'", o:["A","B","C","D"], a:1, e:"With the singular subject 'She', the correct auxiliary is 'has been', not 'have been' — the error is in part B."},
+{t:"Spot the Error", q:"Identify the part with an error: 'He don't like (A) / to attend (B) / the morning meetings. (C) / No error (D)'", o:["A","B","C","D"], a:0, e:"With the third-person singular subject 'He', the correct form is 'doesn't like', not 'don't like' — the error is in part A."},
+{t:"Fill in the Blanks", q:"She has been living in Delhi ___ 2010.", o:["since","for","from","at"], a:0, e:"'Since' is used with a specific point in time (2010) to indicate when a continuous action began."},
+{t:"Fill in the Blanks", q:"He is good ___ mathematics.", o:["in","at","on","with"], a:1, e:"The correct idiomatic preposition after 'good' when referring to a skill or subject is 'at' (good at mathematics)."},
+{t:"Synonyms", q:"Choose the word most similar in meaning to 'Benevolent'.", o:["Cruel","Kind","Selfish","Angry"], a:1, e:"'Benevolent' means well-meaning and kindly, so 'Kind' is the closest synonym."},
+{t:"Synonyms", q:"Choose the word most similar in meaning to 'Candid'.", o:["Honest","Secretive","Dull","Harsh"], a:0, e:"'Candid' means open and truthful, closest in meaning to 'Honest'."},
+{t:"Homonyms", q:"Choose the correct word to complete the sentence: 'I need to ___ a letter to my friend.'", o:["right","write","rite","wright"], a:1, e:"'Write' (to compose text) is the correct homonym here; 'right' means correct, 'rite' means ritual, 'wright' means a maker/builder."},
+{t:"Antonyms", q:"Choose the word most opposite in meaning to 'Generous'.", o:["Kind","Stingy","Rich","Helpful"], a:1, e:"'Generous' means willing to give freely; its opposite is 'Stingy', meaning unwilling to spend or give."},
+{t:"Antonyms", q:"Choose the word most opposite in meaning to 'Ancient'.", o:["Old","Modern","Historic","Antique"], a:1, e:"'Ancient' means very old; its direct opposite is 'Modern'."},
+{t:"Spelling", q:"Choose the correctly spelled word.", o:["Recieve","Receive","Receeve","Receve"], a:1, e:"The correct spelling follows the rule 'i before e except after c' being an exception here — it is 'Receive'."},
+{t:"Spelling", q:"Choose the correctly spelled word.", o:["Definately","Definitly","Definitely","Difinitely"], a:2, e:"The correct spelling is 'Definitely' — remember it contains 'finite' within it."},
+{t:"Idioms & Phrases", q:"The idiom 'to break the ice' means:", o:["To start a conversation in a social setting","To cause trouble","To end a relationship","To feel very cold"], a:0, e:"'To break the ice' means to initiate conversation and ease tension in a new or awkward social situation."},
+{t:"Idioms & Phrases", q:"The idiom 'once in a blue moon' means:", o:["Every month","Very rarely","Every night","Frequently"], a:1, e:"'Once in a blue moon' describes something that happens very rarely or infrequently."},
+{t:"One Word Substitution", q:"A person who loves and collects books is called:", o:["Bibliophile","Philanthropist","Bibliographer","Linguist"], a:0, e:"A 'Bibliophile' is a person who loves books; a bibliographer compiles bibliographies, and a philanthropist promotes welfare."},
+{t:"One Word Substitution", q:"A place where money/coins are manufactured is called:", o:["Bank","Treasury","Mint","Exchequer"], a:2, e:"A 'Mint' is the facility where coins and currency are officially manufactured."},
+{t:"Improvement of Sentences", q:"Improve the sentence: 'Neither the manager nor the employees was present.'", o:["was present","were present","is present","has been present"], a:1, e:"With 'neither...nor', the verb agrees with the nearer subject ('employees', plural), so 'were present' is correct."},
+{t:"Active/Passive Voice", q:"Change to passive voice: 'The chef is cooking the meal.'", o:["The meal is cooked by the chef.","The meal is being cooked by the chef.","The meal was cooked by the chef.","The meal has been cooked by the chef."], a:1, e:"Present continuous active ('is cooking') becomes present continuous passive: 'is being cooked'."},
+{t:"Active/Passive Voice", q:"Change to active voice: 'The letter was written by Ram.'", o:["Ram writes the letter.","Ram wrote the letter.","Ram had written the letter.","Ram has written the letter."], a:1, e:"Simple past passive ('was written') becomes simple past active: 'Ram wrote the letter.'"},
+{t:"Narration", q:"Convert to indirect speech: He said, 'I am going to school.'", o:["He said that he is going to school.","He said that he was going to school.","He says that he was going to school.","He said that he will go to school."], a:1, e:"In indirect speech, present continuous ('am going') shifts to past continuous ('was going') when the reporting verb is in the past tense."},
+{t:"Shuffling of Sentence Parts", q:"Rearrange the parts to form a meaningful sentence: (P) the meeting (Q) was postponed (R) due to (S) heavy rain", o:["PQRS","QPRS","PQSR","SRQP"], a:0, e:"The logical order is: 'The meeting (P) was postponed (Q) due to (R) heavy rain (S).'"},
+{t:"Shuffling of Sentences (Passage)", q:"Which sentence should logically come first in a paragraph about starting a business? A) He researched the market. B) He decided to start a business. C) He launched the product. D) He raised funds.", o:["A","B","C","D"], a:1, e:"Logically, the decision to start a business (B) must come first, before research, funding, and launch."},
+{t:"Cloze Passage", q:"Fill in the blank: 'Despite the heavy rain, the match ___ on schedule.'", o:["was held","is held","held","holds"], a:0, e:"The sentence describes a completed past event, so the correct form is the simple past passive 'was held'."},
+{t:"Cloze Passage", q:"Fill in the blank: 'She works hard ___ she may achieve success.'", o:["so that","because","although","unless"], a:0, e:"'So that' correctly introduces the purpose of her hard work — to achieve success."},
+{t:"Comprehension Passage", q:"Passage: 'Reading enhances vocabulary and imagination. It also reduces stress and improves focus. Regular readers tend to perform better academically.' According to the passage, reading helps in:", o:["Only vocabulary","Only stress reduction","Vocabulary, imagination, stress reduction and focus","None of these"], a:2, e:"The passage lists multiple benefits of reading: vocabulary, imagination, stress reduction, and focus."},
+{t:"Comprehension Passage", q:"Passage: 'Reading enhances vocabulary and imagination. It also reduces stress and improves focus. Regular readers tend to perform better academically.' The passage suggests that regular readers:", o:["Perform worse academically","Have no academic benefit","Perform better academically","Are less focused"], a:2, e:"The passage explicitly states that regular readers 'tend to perform better academically'."}
+]
+};
+
+const SECTION_META = [
+  {key:"GI", name:"General Intelligence", short:"GI"},
+  {key:"GA", name:"General Awareness", short:"GA"},
+  {key:"QA", name:"Quantitative Aptitude", short:"QA"},
+  {key:"EL", name:"English Language", short:"EL"}
+];
+const Q_PER_SECTION = 20;
+const MARKS_CORRECT = 2;
+const MARKS_WRONG = 0.5;
+const TOTAL_SECONDS = 60 * 60; // 60 minute exam
+
+/* ================= STATE ================= */
+let state = null; // built at test start
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildTest(){
+  const sections = SECTION_META.map(meta => {
+    const pool = shuffle(BANK[meta.key]).slice(0, Q_PER_SECTION);
+    const questions = pool.map(item => {
+      const order = shuffle([0,1,2,3]);
+      const newOptions = order.map(i => item.o[i]);
+      const newCorrect = order.indexOf(item.a);
+      return {
+        topic: item.t,
+        text: item.q,
+        options: newOptions,
+        correct: newCorrect,
+        explanation: item.e,
+        selected: null,
+        visited: false
+      };
+    });
+    return { key: meta.key, name: meta.name, short: meta.short, questions };
+  });
+  return {
+    sections,
+    currentSection: 0,
+    currentQuestion: 0,
+    secondsLeft: TOTAL_SECONDS,
+    timerId: null,
+    submitted: false,
+    startedAt: null,
+    finishedAt: null
+  };
+}
+
+/* ================= RENDER HELPERS ================= */
+const app = document.getElementById('app');
+function el(html){ const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; }
+function fmtTime(s){
+  const m = Math.floor(s/60), sec = s%60;
+  return String(m).padStart(2,'0') + ":" + String(sec).padStart(2,'0');
+}
+
+/* ================= START SCREEN ================= */
+function renderStart(){
+  document.body.className = "no-rules";
+  const totalQ = SECTION_META.length * Q_PER_SECTION;
+  const totalMarks = totalQ * MARKS_CORRECT;
+  app.innerHTML = "";
+  app.appendChild(el(`
+    <div class="start-wrap">
+      <div class="admit-card">
+        <div class="stamp">MOCK<br>TEST</div>
+        <h1>General Competitive Exam</h1>
+        <div class="sub">Combined mock test — General Intelligence · General Awareness · Quantitative Aptitude · English Language</div>
+        <div class="facts-grid">
+          <div class="fact"><div class="label">TOTAL QUESTIONS</div><div class="value">${totalQ}</div></div>
+          <div class="fact"><div class="label">TOTAL MARKS</div><div class="value">${totalMarks}</div></div>
+          <div class="fact"><div class="label">TIME ALLOWED</div><div class="value">${TOTAL_SECONDS/60} min</div></div>
+          <div class="fact"><div class="label">NEGATIVE MARKING</div><div class="value">-0.5 / wrong</div></div>
+        </div>
+        <ul class="section-list">
+          ${SECTION_META.map(s => `<li><b>${s.name}</b><span class="mono">${Q_PER_SECTION} Q · ${Q_PER_SECTION*MARKS_CORRECT} marks</span></li>`).join("")}
+        </ul>
+        <ul class="rules">
+          <li>Each question carries <b>+${MARKS_CORRECT} marks</b> for a correct answer.</li>
+          <li><b>-${MARKS_WRONG} marks</b> will be deducted for each wrong answer. No penalty for unattempted questions.</li>
+          <li>Every attempt is freshly randomised — questions, their order, and option order all change.</li>
+          <li>You may move freely between sections and questions before submitting.</li>
+          <li>Full solutions with explanations are shown after you submit.</li>
+        </ul>
+        <div class="cta-row">
+          <button class="btn btn-primary" id="startBtn">Start Test</button>
+        </div>
+      </div>
+    </div>
+  `));
+  document.getElementById('startBtn').addEventListener('click', () => {
+    state = buildTest();
+    state.startedAt = new Date();
+    startTimer();
+    renderTest();
+  });
+}
+
+/* ================= TIMER ================= */
+function startTimer(){
+  clearInterval(state.timerId);
+  state.timerId = setInterval(() => {
+    state.secondsLeft--;
+    updateTimerDisplay();
+    if (state.secondsLeft <= 0){
+      clearInterval(state.timerId);
+      submitTest(true);
+    }
+  }, 1000);
+}
+function updateTimerDisplay(){
+  const box = document.getElementById('timerDisplay');
+  if (!box) return;
+  box.textContent = fmtTime(state.secondsLeft);
+  box.parentElement.classList.toggle('low', state.secondsLeft <= 300);
+}
+
+/* ================= TEST SCREEN ================= */
+function renderTest(){
+  document.body.className = "";
+  const sec = state.sections[state.currentSection];
+  const q = sec.questions[state.currentQuestion];
+  q.visited = true;
+
+  app.innerHTML = `
+    <div class="exam-header">
+      <div class="title">Mock Test</div>
+      <div class="timer-box"><span id="timerDisplay">${fmtTime(state.secondsLeft)}</span></div>
+      <button class="submit-btn-header" id="submitTopBtn">Submit</button>
+    </div>
+    <div class="section-tabs" id="sectionTabs"></div>
+    <div class="test-body">
+      <div class="q-panel">
+        <div class="q-card" id="qCard"></div>
+      </div>
+      <div class="palette-side">
+        <div class="palette-card" id="paletteCard"></div>
+      </div>
+    </div>
+    <button class="palette-drawer-btn" id="drawerBtn">Question Palette</button>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer-sheet" id="drawerSheet"></div>
+    <div class="bottom-bar">
+      <button class="nav-secondary" id="prevBtn">◀ Previous</button>
+      <button class="nav-primary" id="nextBtn">Save &amp; Next ▶</button>
+    </div>
+  `;
+
+  renderSectionTabs();
+  renderQuestionCard();
+  renderPalette(document.getElementById('paletteCard'));
+
+  document.getElementById('submitTopBtn').addEventListener('click', confirmSubmit);
+  document.getElementById('prevBtn').addEventListener('click', () => navigate(-1));
+  document.getElementById('nextBtn').addEventListener('click', () => navigate(1));
+  document.getElementById('drawerBtn').addEventListener('click', openDrawer);
+  document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
+
+  document.getElementById('prevBtn').disabled = (state.currentSection === 0 && state.currentQuestion === 0);
+}
+
+function renderSectionTabs(){
+  const wrap = document.getElementById('sectionTabs');
+  wrap.innerHTML = "";
+  state.sections.forEach((sec, i) => {
+    const answered = sec.questions.filter(q => q.selected !== null).length;
+    const tab = el(`<button class="tab ${i===state.currentSection ? 'active':''}">${sec.short}<span class="cnt">${answered}/${Q_PER_SECTION}</span></button>`);
+    tab.addEventListener('click', () => {
+      state.currentSection = i;
+      state.currentQuestion = 0;
+      renderTest();
+    });
+    wrap.appendChild(tab);
+  });
+}
+
+function renderQuestionCard(){
+  const sec = state.sections[state.currentSection];
+  const q = sec.questions[state.currentQuestion];
+  const card = document.getElementById('qCard');
+  card.innerHTML = `
+    <div class="q-meta">
+      <span class="q-num">${sec.short} · Q${state.currentQuestion+1} / ${Q_PER_SECTION}</span>
+      <span class="q-topic">${q.topic}</span>
+    </div>
+    <div class="q-text">${q.text}</div>
+    <div id="optsWrap"></div>
+  `;
+  const optsWrap = card.querySelector('#optsWrap');
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, idx) => {
+    const row = el(`
+      <div class="opt ${q.selected===idx ? 'selected':''}" data-idx="${idx}">
+        <span class="bubble">${letters[idx]}</span>
+        <span class="opt-text">${opt}</span>
+      </div>
+    `);
+    row.addEventListener('click', () => {
+      q.selected = (q.selected === idx) ? null : idx;
+      renderQuestionCard();
+      renderSectionTabs();
+      renderPalette(document.getElementById('paletteCard'));
+      renderPalette(document.getElementById('drawerSheet'), true);
+    });
+    optsWrap.appendChild(row);
+  });
+}
+
+function renderPalette(container, isDrawer){
+  if (!container) return;
+  const sec = state.sections[state.currentSection];
+  container.innerHTML = `
+    ${isDrawer ? '<div class="drawer-handle"></div>' : ''}
+    <div style="font-weight:700;font-size:13px;margin-bottom:8px;">${sec.name}</div>
+    <div class="palette-legend">
+      <span><span class="legend-dot" style="background:var(--good)"></span>Answered</span>
+      <span><span class="legend-dot" style="background:var(--accent)"></span>Visited</span>
+      <span><span class="legend-dot" style="background:var(--paper-2);border:1px solid var(--rule)"></span>Not visited</span>
+    </div>
+    <div class="p-grid" id="pgrid-${isDrawer ? 'drawer':'side'}"></div>
+  `;
+  const grid = container.querySelector('.p-grid');
+  sec.questions.forEach((q, idx) => {
+    let cls = "";
+    if (q.selected !== null) cls = "answered";
+    else if (q.visited) cls = "visited";
+    if (idx === state.currentQuestion) cls += " current";
+    const cell = el(`<button class="p-cell ${cls}">${idx+1}</button>`);
+    cell.addEventListener('click', () => {
+      state.currentQuestion = idx;
+      closeDrawer();
+      renderTest();
+    });
+    grid.appendChild(cell);
+  });
+}
+
+function openDrawer(){
+  renderPalette(document.getElementById('drawerSheet'), true);
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('drawerSheet').classList.add('open');
+}
+function closeDrawer(){
+  const o = document.getElementById('drawerOverlay');
+  const s = document.getElementById('drawerSheet');
+  if (o) o.classList.remove('open');
+  if (s) s.classList.remove('open');
+}
+
+function navigate(dir){
+  const sec = state.sections[state.currentSection];
+  let qi = state.currentQuestion + dir;
+  let si = state.currentSection;
+  if (qi < 0){
+    if (si === 0) return;
+    si--; qi = state.sections[si].questions.length - 1;
+  } else if (qi >= sec.questions.length){
+    if (si === state.sections.length - 1) return;
+    si++; qi = 0;
+  }
+  state.currentSection = si;
+  state.currentQuestion = qi;
+  renderTest();
+}
+
+function confirmSubmit(){
+  const totalAnswered = state.sections.reduce((sum,s) => sum + s.questions.filter(q=>q.selected!==null).length, 0);
+  const totalQ = SECTION_META.length * Q_PER_SECTION;
+  const existing = document.getElementById('confirmOverlay');
+  if (existing) existing.remove();
+  const overlay = el(`
+    <div id="confirmOverlay" style="position:fixed;inset:0;z-index:40;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--card);border-radius:8px;padding:22px;max-width:360px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <h3 style="margin-bottom:10px;">Submit the test?</h3>
+        <p style="font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:18px;">You've answered ${totalAnswered} of ${totalQ} questions. Once submitted, you can't change your answers.</p>
+        <div style="display:flex;gap:10px;">
+          <button class="nav-secondary" id="cancelSubmit" style="flex:1;padding:11px;border-radius:3px;font-weight:600;">Keep Working</button>
+          <button class="nav-primary" id="confirmSubmitBtn" style="flex:1;padding:11px;border-radius:3px;font-weight:600;">Submit</button>
+        </div>
+      </div>
+    </div>
+  `);
+  document.body.appendChild(overlay);
+  document.getElementById('cancelSubmit').addEventListener('click', () => overlay.remove());
+  document.getElementById('confirmSubmitBtn').addEventListener('click', () => { overlay.remove(); submitTest(false); });
+}
+
+function submitTest(auto){
+  clearInterval(state.timerId);
+  state.submitted = true;
+  state.finishedAt = new Date();
+  closeDrawer();
+  renderResult(auto);
+}
+
+/* ================= SCORING ================= */
+function computeScores(){
+  const perSection = state.sections.map(sec => {
+    let correct=0, wrong=0, skipped=0, marks=0;
+    sec.questions.forEach(q => {
+      if (q.selected === null) skipped++;
+      else if (q.selected === q.correct){ correct++; marks += MARKS_CORRECT; }
+      else { wrong++; marks -= MARKS_WRONG; }
+    });
+    return { key: sec.key, name: sec.name, correct, wrong, skipped, marks, total: sec.questions.length };
+  });
+  const totalMarks = perSection.reduce((s,x)=>s+x.marks,0);
+  const totalCorrect = perSection.reduce((s,x)=>s+x.correct,0);
+  const totalWrong = perSection.reduce((s,x)=>s+x.wrong,0);
+  const totalSkipped = perSection.reduce((s,x)=>s+x.skipped,0);
+  const totalQ = perSection.reduce((s,x)=>s+x.total,0);
+  const maxMarks = totalQ * MARKS_CORRECT;
+  return { perSection, totalMarks, totalCorrect, totalWrong, totalSkipped, totalQ, maxMarks };
+}
+
+/* ================= RESULT SCREEN ================= */
+function renderResult(auto){
+  document.body.className = "no-rules";
+  const sc = computeScores();
+  const timeTakenSec = TOTAL_SECONDS - state.secondsLeft;
+  const accuracy = (sc.totalCorrect + sc.totalWrong) > 0 ? Math.round((sc.totalCorrect / (sc.totalCorrect + sc.totalWrong)) * 100) : 0;
+
+  app.innerHTML = "";
+  app.appendChild(el(`
+    <div class="result-wrap">
+      ${auto ? '<div style="background:var(--bad-bg);color:var(--bad);padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:16px;">Time is up — your test was submitted automatically.</div>' : ''}
+      <div class="score-hero">
+        <div style="font-size:13px;color:var(--ink-soft);">YOUR SCORE</div>
+        <div class="big">${sc.totalMarks.toFixed(1)}</div>
+        <div class="of">out of ${sc.maxMarks} marks</div>
+        <div class="stat-row">
+          <div class="stat-chip"><div class="n">${sc.totalCorrect}</div><div class="l">CORRECT</div></div>
+          <div class="stat-chip"><div class="n">${sc.totalWrong}</div><div class="l">WRONG</div></div>
+          <div class="stat-chip"><div class="n">${sc.totalSkipped}</div><div class="l">SKIPPED</div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-chip"><div class="n">${accuracy}%</div><div class="l">ACCURACY</div></div>
+          <div class="stat-chip"><div class="n">${fmtTime(timeTakenSec)}</div><div class="l">TIME TAKEN</div></div>
+          <div class="stat-chip"><div class="n">${sc.totalQ}</div><div class="l">TOTAL QUESTIONS</div></div>
+        </div>
+      </div>
+      <h3 style="margin-bottom:12px;">Section-wise breakdown</h3>
+      <div id="secCards"></div>
+      <div class="cta-row" style="margin-top:20px;">
+        <button class="btn btn-primary" id="viewSolBtn">View Solutions</button>
+        <button class="btn btn-ghost" id="retakeBtn">Retake with New Questions</button>
+      </div>
+    </div>
+  `));
+
+  const secCards = document.getElementById('secCards');
+  sc.perSection.forEach(s => {
+    const pct = Math.max(0, Math.round((s.marks / (s.total*MARKS_CORRECT)) * 100));
+    secCards.appendChild(el(`
+      <div class="sec-card">
+        <div class="sec-card-top"><h3>${s.name}</h3><span class="sec-score">${s.marks.toFixed(1)} / ${s.total*MARKS_CORRECT}</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+        <div class="sec-sub">
+          <span>✔ ${s.correct} correct</span>
+          <span>✘ ${s.wrong} wrong</span>
+          <span>— ${s.skipped} skipped</span>
+        </div>
+      </div>
+    `));
+  });
+
+  document.getElementById('viewSolBtn').addEventListener('click', renderSolutions);
+  document.getElementById('retakeBtn').addEventListener('click', renderStart);
+}
+
+/* ================= SOLUTIONS SCREEN ================= */
+function renderSolutions(){
+  document.body.className = "no-rules";
+  app.innerHTML = "";
+  const wrap = el(`
+    <div class="sol-wrap">
+      <div class="top-nav-result">
+        <button class="btn btn-ghost" id="backToResult">◀ Back to Scorecard</button>
+        <button class="btn btn-primary" id="retakeBtn2">Retake with New Questions</button>
+      </div>
+      <h2>Solutions &amp; Explanations</h2>
+      <div id="solBody"></div>
+    </div>
+  `);
+  app.appendChild(wrap);
+  const body = document.getElementById('solBody');
+  const letters = ['A','B','C','D'];
+
+  state.sections.forEach(sec => {
+    body.appendChild(el(`<h3 class="sol-sec-heading">${sec.name}</h3>`));
+    sec.questions.forEach((q, idx) => {
+      let status = 'skipped';
+      if (q.selected !== null) status = (q.selected === q.correct) ? 'correct' : 'wrong';
+      const tagText = status === 'correct' ? 'Correct' : status === 'wrong' ? 'Wrong' : 'Not Attempted';
+      const card = el(`
+        <div class="sol-card ${status}">
+          <div class="sol-q-top">
+            <span class="q-num">${sec.short} · Q${idx+1}</span>
+            <span class="sol-tag ${status}">${tagText}</span>
+          </div>
+          <div class="sol-q">${q.text}</div>
+          <div id="optlist-${sec.key}-${idx}"></div>
+          <div class="sol-explain"><b>How to solve:</b> ${q.explanation}</div>
+        </div>
+      `);
+      const optlist = card.querySelector(`#optlist-${sec.key}-${idx}`);
+      q.options.forEach((opt, oi) => {
+        let cls = "";
+        if (oi === q.correct) cls = "is-correct";
+        else if (oi === q.selected) cls = "is-wrong-pick";
+        optlist.appendChild(el(`<div class="sol-opt ${cls}"><span>${letters[oi]}.</span><span>${opt}</span></div>`));
+      });
+      body.appendChild(card);
+    });
+  });
+
+  document.getElementById('backToResult').addEventListener('click', () => renderResult(false));
+  document.getElementById('retakeBtn2').addEventListener('click', renderStart);
+}
+
+/* ================= INIT ================= */
+renderStart();
+
+})();
+</script>
+</body>
+</html>
